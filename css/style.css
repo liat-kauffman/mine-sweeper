@@ -28,11 +28,11 @@ h1 {
     font-weight: bolder;
 }
 
-/* .restart-btn {
+.restart-btn {
     background-color: bisque;
     margin-top: 20px;
     border-width: 0.5px;
-} */
+}
 
 
 
@@ -46,17 +46,20 @@ h1 {
    
 }
 
-.hidden {
+.cell {
+    color: transparent;
     background-color: rgb(228, 96, 96);
     cursor: default;
 }
 
-
+.uncovered {
+    background-color: antiquewhite;
+}
 td.mine {
     color: transparent;
     background-color: rgb(228, 96, 96);
 }
 
-.number {
-    background-color: rgb(229, 159, 159);
+.neg-count{
+    background-color: rgb(228, 96, 96);
 }
