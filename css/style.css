@@ -52,14 +52,13 @@ h1 {
     cursor: default;
 }
 
-.uncovered {
+.revealed {
+    color: black;
     background-color: antiquewhite;
 }
 td.mine {
-    color: transparent;
     background-color: rgb(228, 96, 96);
 }
 
-.neg-count{
-    background-color: rgb(228, 96, 96);
-}
+
+
