@@ -1,172 +1,4 @@
-// 'use strict'
 
-// const EMPTY = ''
-// const MINE = '💣'
-// const FLAG = '🚩'
-
-
-
-// const gLevel = {
-//     size: 4,
-//     mines: 2
-// }
-// var gBoard = []
-
-// const gCell = {
-//     minesAroundCount: 0,
-//     isCovered: true,
-//     isMine: false,
-//     isMarked: false}
-    
-    
-//     const gGame = {
-//         isOn: false,
-//         coveredCount: 0,
-//         markedCount: 0,
-//         secsPassed: 0
-//     }
-    
-//     function onInit(){
-        
-//         gBoard = buildBoard()
-
-//         renderBoard(gBoard)
-        
-//         gGame.isOn = true
-//     }
-    
-
-//     function buildBoard() {
-//         const size = gLevel.size
-//         const board = []
-        
-//         for (var i = 0; i < size; i++) {
-//             board.push([]);
-//             for (var j = 0; j < size; j++) {
-//                 board[i][j] = EMPTY; 
-//             }
-//         }
-        
-//         var mine = gLevel.mines
-//         while (mine > 0) {
-//             const randomRow = Math.floor(Math.random() * size)
-//             const randomCol = Math.floor(Math.random() * size)
-            
-//             if (board[randomRow][randomCol] !== MINE) {
-//                 board[randomRow][randomCol] = MINE
-//                 mine--
-//             }
-//         }
-        
-//         console.table('board:', board);
-//         return board;
-//     }
-    
-    
-    
-    
-//     function renderBoard(board) {
-//         var strHTML = ''
-//         for (var i = 0; i < board.length; i++) {
-//             strHTML += '<tr>'
-            
-//             for (var j = 0; j < board[0].length; j++) {
-//                 var cell = board[i][j]
-//                 gCell.isMine = cell === MINE
-//                 var className = gCell.isMine ? 'mine covered cell' : 'neg-count covered cell'
-//                 gCell.minesAroundCount = countNeighbors(i, j, board) 
-                
-                
-                
-//                 if (gCell.minesAroundCount === '') {
-//                     className = 'empty covered cell'
-//                 }
-//                 if (className === 'neg-count covered cell') {
-//                     board[i][j] = `${gCell.minesAroundCount}`
-//                 }
-                
-//                 strHTML += `<td 
-//                 id="cell-${i}"-"${j}" 
-//                 data-is-covered="${gCell.isCovered}" 
-//                 data-is-marked="${gCell.isMarked}" 
-//                 data-is-mine="${gCell.isMine}" 
-//                 onclick="onCellClicked(this,${i},${j})"
-//                 class="${className}">
-//                 ${gCell.isMine ? '' : gCell.minesAroundCount} 
-//                 </td>`;
-//             }
-            
-//             strHTML += '</tr>'
-//         }
-        
-//         var elBoard = document.querySelector('.board')
-//         elBoard.innerHTML = strHTML
-//     }
-    
-    
- 
-  
-// function countNeighbors(cellI, cellJ, mat) {
-//     var neighborsCount = 0;
-//     for (var i = cellI - 1; i <= cellI + 1; i++) {
-//       if (i < 0 || i >= mat.length) continue;
-//       for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-//         if (i === cellI && j === cellJ) continue; // Skip the current cell itself
-//         if (j < 0 || j >= mat[i].length) continue;
-//         if (mat[i][j] === MINE) neighborsCount++;
-//     }
-// }
-// if (neighborsCount === 0) return ''
-//     return neighborsCount;
-//   }
-
-// function gameOver() {
-    
-//     gGame.isOn = false
-// }
-
-// function restart(){
-//     gLevel.mines = 2
-//     onInit(gBoard)
-
-// }
-
-// function onCellClicked(i,j) {
-        
-//         const elCell = document.getElementById(`cell-${i}-${j}`)
-      
-//         if (gameOver || elCell.classList.contains('revealed')) {
-//           return
-//         }
-
-//         revealCell(i, j)
-//         checkGameStatus()
-//       }
-
-// function revealCell(i, j){
-
-//     const elCell = document.getElementById(`cell-${i}-${j}`)
-//     elCell.dataset.isCovered
-
-//     if (elCell.dataset.isCovered) {
-//         !elCell.dataset.isCovered
-//         elCell.classList.repplace('covered', 'revealed')
-//     }
-
-// }
-
-
-// function getCellCoord(strCellId) {
-//     const coord = {}
-//     const parts = strCellId.split('-') // ['cell', '2', '7']
-//     coord.i = +parts[1]
-//     coord.j = +parts[2]
-//     console.log('coord:', coord) // {i: 2, j: 7}
-//     return coord
-// }
-
-
-  
 'use strict'
 
 const EMPTY = ''
@@ -342,9 +174,9 @@ function checkWin() {
         }
         if (!allRevealed) break
         
-        countCovered()
         
-        if(countCovered() === gLevel.mines) return allRevealed
+
+        if(gGame.countCovered === gLevel.mines) return allRevealed
         
        
 
@@ -354,16 +186,13 @@ function checkWin() {
 
 function countCovered() { 
 
-    var coveredCount = 0
-
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[i].length; j++) {
             if (gBoard[i][j].isCovered) {
-                coveredCount++
+                gGame.countCovered++
             }
         }
-    return coveredCount
-}
+    }
 }
 
 
