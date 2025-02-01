@@ -6,6 +6,8 @@ body {
 
 
 table {
+    width: 400px;
+    height: 400px;
     border: 1px solid black;
     margin-inline: auto;
     margin-block: 10px;
@@ -13,10 +15,10 @@ table {
 }
 
 .board td {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border: 1px solid black;
-    padding: 10px;
+    padding: 5pxpx;
     text-align: center;
     transition: background-color 0.5s;
     cursor: pointer;
@@ -30,20 +32,21 @@ h1 {
 
 .restart-btn {
     background-color: bisque;
-    margin-top: 20px;
     border-width: 0.5px;
+    margin-right: 20px;
+    padding-top: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    border-color: rgb(250, 203, 145);
+    border-radius: 15px;
+    
 }
 
 
 
 .board td:hover {
     background-color: lightsalmon;
-}
-
-.cell {
-    background-color: rgb(229, 159, 159);
-    cursor: default;
-   
 }
 
 .cell {
@@ -54,10 +57,49 @@ h1 {
 
 .revealed {
     color: black;
-    background-color: antiquewhite;
+    background-color: rgb(244, 155, 155);
 }
 td.mine {
     background-color: rgb(228, 96, 96);
+}
+
+.cell.marked {
+    color: black;
+    font-size: 10px;
+}
+
+.timer-container {
+    margin: 10px;
+    text-align: center;
+}
+.timer {
+    margin-right: 15px;
+}
+.level{
+    background-color: bisque;
+    font-size: 14px;
+    border-width: 0.5px;
+    margin-right: 20px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    border-color: rgb(250, 203, 145);
+    border-radius: 15px;
+}
+
+
+.menu{
+    text-align: left;
+    margin-left: 450px;
+    display: flex;
+    flex-direction: row;
+    
+
+}
+
+.marks-count {
+    padding-right: 20px;
 }
 
 
