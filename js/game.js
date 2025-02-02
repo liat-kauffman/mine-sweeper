@@ -7,6 +7,7 @@ const FLAG = '🚩'
 
 var gTimerInterval;
 
+
 const gLevel = {
     size: 6,
     mines: 5
@@ -21,37 +22,6 @@ const gGame = {
     lives: 3
 }
 
-function updateLevel(elBtn){
-
-    if (elBtn.classList.contains('beginner')){
-        updateLevelbeginner()
-    } 
-    else if (elBtn.classList.contains('intermediate')){
-        updateLeveInter()
-    }
-    else if (elBtn.classList.contains('expert')){
-        updateLevelExpert()
-    }
-
-}
-
-function updateLevelbeginner(){
-    gLevel.size = 6
-    gLevel.mines = 5
-    onInit()
-}
-
-function updateLeveInter(){
-    gLevel.size = 10
-    gLevel.mines = 20
-    onInit()
-}
-
-function updateLevelExpert(){
-    gLevel.size = 15
-    gLevel.mines = 40
-    onInit()
-}
 
 function onInit() {
     gBoard = buildBoard()
@@ -62,12 +32,63 @@ function onInit() {
     gGame.lives = 3
     updateLives()
     updateMarksLeft()
+    displayHighScore()
 }
 
-function updateLives(){
-    const elLives =document.querySelector('.lives')
-    elLives.innerText =`Lives: ${'❤️'.repeat(gGame.lives)}`
+function restart() {
+    clearInterval(gTimerInterval)
+    gTimerInterval = null
+    gGame.secsPassed = 0
+    gGame.lives = 3
+    gGame.markedLeft = gLevel.mines
+
+    document.querySelector('.timer').innerHTML = "00:00"
+    gGame.isOn = true
+
+    gBoard = buildBoard()
+    renderBoard(gBoard)
+    resetMsg()
+    resetSmilyBtn()
+    updateLives()
+    updateMarksLeft()
+    displayHighScore()
+    
 }
+
+
+function updateLevel(elBtn){
+
+    if (elBtn.classList.contains('beginner')){
+        updateLevelbeginner()
+        
+    } 
+    else if (elBtn.classList.contains('intermediate')){
+        updateLeveInter()
+        
+    }
+    else if (elBtn.classList.contains('expert')){
+        updateLevelExpert()
+        
+    }
+    restart()
+}
+
+function updateLevelbeginner(){
+    gLevel.size = 6
+    gLevel.mines = 5
+
+}
+
+function updateLeveInter(){
+    gLevel.size = 10
+    gLevel.mines = 20
+}
+
+function updateLevelExpert(){
+    gLevel.size = 15
+    gLevel.mines = 40
+}
+
 
 function buildBoard() {
     const size = gLevel.size
@@ -149,21 +170,6 @@ function renderBoard(board) {
 }
 
 
-function countNeighbors(cellI, cellJ, mat) {
-    var neighborsCount = 0
-    for (var i = cellI - 1; i <= cellI + 1; i++) {
-        if (i < 0 || i >= mat.length) continue
-        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            if (i === cellI && j === cellJ) continue 
-            if (j < 0 || j >= mat[i].length) continue
-            if (mat[i][j].isMine) neighborsCount++
-        }
-    }
-    return neighborsCount
-}
-
-
-
 function onCellClicked(elCell) {
 
     if (!gGame.isOn) return
@@ -195,7 +201,7 @@ function onCellClicked(elCell) {
                 cell.isCovered = true
                 elCell.classList.add('covered')
                 elCell.classList.remove('revealed')
-                elCell.textContent = ''
+                elCell.textContent = MINE
             }, 1000)
         }
 
@@ -210,6 +216,7 @@ function onCellMarked(event, elCell) {
     event.preventDefault()
 
     if (!gGame.isOn) return
+    
 
     const i = +elCell.dataset.i
     const j = +elCell.dataset.j
@@ -232,12 +239,37 @@ function onCellMarked(event, elCell) {
         elCell.classList.add('marked')
     }
 
+
     updateMarksLeft()
     checkWin()
 }
 
 
+function updateMarksLeft(){
+    
+        const elmarksCount = document.querySelector('.marks-count')
+        elmarksCount.innerText =`marks: ${gGame.markedLeft}`
+}
 
+function updateLives(){
+    const elLives =document.querySelector('.lives')
+    elLives.innerText =`${'❤️ '.repeat(gGame.lives)}`
+}
+
+
+
+function countNeighbors(cellI, cellJ, mat) {
+    var neighborsCount = 0
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= mat.length) continue
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (i === cellI && j === cellJ) continue 
+            if (j < 0 || j >= mat[i].length) continue
+            if (mat[i][j].isMine) neighborsCount++
+        }
+    }
+    return neighborsCount
+}
 function revealNeighbors(row, col) {
     for (var i = row - 1; i <= row + 1; i++) {
         for (var j = col - 1; j <= col + 1; j++) {
@@ -248,10 +280,6 @@ function revealNeighbors(row, col) {
         }
     }
 }
-
-
-
-
 function revealAllMines() {
     for (var i = 0; i < gLevel.size; i++) {
         for (var j = 0; j < gLevel.size; j++) {
@@ -261,11 +289,12 @@ function revealAllMines() {
                 elCell.classList.add('revealed')
                 elCell.style.color = 'black'
                 elCell.style.backgroundColor = 'red'
-                elCell.textContent = MINE
+                elCell.innerText = MINE
             }
         }
     }
 }
+
 
 
 function checkWin() {
@@ -295,22 +324,6 @@ function checkWin() {
     return false;
 }
 
-
-function countCovered() { 
-    var count = 0
-    for (var i = 0; i < gBoard.length; i++) {
-        for (var j = 0; j < gBoard[i].length; j++) {
-            if (gBoard[i][j].isCovered) {
-                count++
-                console.log(count)
-            }
-            
-        }
-    }
-    return count
-}
-
-
 function gameOver(isWin) {
     gGame.isOn = false
 
@@ -318,6 +331,7 @@ function gameOver(isWin) {
 
     if (isWin) {
         elMsg.innerText = '🎉 You won!'
+        checkAndSaveHighScore()
     } else {
         revealAllMines()
         elMsg.innerText = '💥 Game over!'
@@ -327,25 +341,11 @@ function gameOver(isWin) {
 }
 
 
-function restart() {
-    clearInterval(gTimerInterval)
-    gTimerInterval = null
-    gGame.secsPassed = 0
-    gGame.lives = 3
-    gGame.markedLeft = gLevel.mines
-
-    document.querySelector('.timer').innerHTML = "00:00"
-    gGame.isOn = true
-
-    gBoard = buildBoard()
-    renderBoard(gBoard)
-    resetMsg()
-    resetSmilyBtn()
-    updateLives()
-    updateMarksLeft()
+function updateSmiley(isWin) {
+    var elSmileyBtn = document.querySelector('.restart-btn span')
+    elSmileyBtn.innerText = isWin ? '😎' : '😢'
     
 }
-
 
 function resetSmilyBtn(){
     var elSmilyBtn = document.querySelector('.restart-btn span')
@@ -356,20 +356,6 @@ function resetSmilyBtn(){
 function resetMsg(){
     const elMsg = document.querySelector('.msg')
     elMsg.innerText = ''
-}
-
-function updateSmiley(isWin) {
-    var elSmileyBtn = document.querySelector('.restart-btn span')
-    elSmileyBtn.innerText = isWin ? '😎' : '😢'
-    
-}
-
-
-
-
-function resetTimer() {
-    clearInterval(gTimerInterval)
-    document.querySelector('.timer').innerHTML = "00:00"
 }
 
 
@@ -398,13 +384,56 @@ function startTimer() {
     }, 10) 
 }
 
-function updateMarksLeft(){
-    
-        const elmarksCount =document.querySelector('.marks-count')
-        elmarksCount.innerText =`marks: ${gGame.markedLeft}`
+function resetTimer() {
+    clearInterval(gTimerInterval)
+    document.querySelector('.timer').innerHTML = "00:00"
 }
 
 
+
+function checkAndSaveHighScore(){
+    var bestTime = localStorage.getItem('highScore')
+    var currTime = gGame.secsPassed * 1000
+
+    if (!bestTime || currTime < bestTime){
+        localStorage.setItem('highScore', currTime)
+        displayHighScore()
+    }
+}
+
+function displayHighScore(){
+    var bestTime = localStorage.getItem('highScore')
+
+    if (!bestTime) {
+        bestTime = '0'
+    } else {
+        var minutes = Math.floor(bestTime / 60000)
+        var seconds = Math.floor((bestTime % 60000) / 1000)
+        var milliseconds = Math.floor((bestTime % 1000) / 10)
+        bestTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`
+    }
+
+    document.querySelector('.high-score').innerText = `Best Score: ${bestTime}`;
+}
+
+function clearHighScore(){
+    localStorage.removeItem('highScore')
+    displayHighScore()
+}
+
+function countCovered() { 
+    var count = 0
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+            if (gBoard[i][j].isCovered) {
+                count++
+                console.log(count)
+            }
+            
+        }
+    }
+    return count
+}
 
 
 // liat kauffman
