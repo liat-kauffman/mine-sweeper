@@ -10,7 +10,8 @@ var gTimerInterval;
 
 const gLevel = {
     size: 6,
-    mines: 5
+    mines: 5,
+    class: ''
 }
 var gBoard = []
 
@@ -33,6 +34,7 @@ function onInit() {
     updateLives()
     updateMarksLeft()
     displayHighScore()
+    updateLevel()
 }
 
 function restart() {
@@ -58,15 +60,16 @@ function restart() {
 
 function updateLevel(elBtn){
 
-    if (elBtn.classList.contains('beginner')){
+    if (elBtn === 1){
         updateLevelbeginner()
         
+        
     } 
-    else if (elBtn.classList.contains('intermediate')){
+    else if (elBtn === 2){
         updateLeveInter()
         
     }
-    else if (elBtn.classList.contains('expert')){
+    else if (elBtn === 3){
         updateLevelExpert()
         
     }
@@ -82,6 +85,7 @@ function updateLevelbeginner(){
 function updateLeveInter(){
     gLevel.size = 10
     gLevel.mines = 20
+
 }
 
 function updateLevelExpert(){
@@ -120,14 +124,16 @@ function buildBoard() {
 }
 
 function placeMines(board) {
-    const size = gLevel.size;
-    let minesPlaced = 0;
+    const size = gLevel.size
+    var minesPlaced = 0
     while (minesPlaced < gLevel.mines) {
         const randomRow = Math.floor(Math.random() * size)
         const randomCol = Math.floor(Math.random() * size)
-
-        if (!board[randomRow][randomCol].isMine) {
-            board[randomRow][randomCol].isMine = true
+         
+        var currCell = board[randomRow][randomCol]
+        
+        if (!currCell.isMine) {
+            currCell.isMine = true
             minesPlaced++
         }
     }
@@ -140,7 +146,7 @@ function renderBoard(board) {
 
         for (var j = 0; j < board[0].length; j++) {
             const cell = board[i][j]
-            let className = 'cell covered'
+            var className = 'cell covered'
 
             if (cell.isMine) {
                 className += ' mine' 
@@ -246,9 +252,8 @@ function onCellMarked(event, elCell) {
 
 
 function updateMarksLeft(){
-    
-        const elmarksCount = document.querySelector('.marks-count')
-        elmarksCount.innerText =`marks: ${gGame.markedLeft}`
+    const elMarksCount = document.querySelector('.marks-count')
+    elMarksCount.innerText =`marks: ${gGame.markedLeft}`
 }
 
 function updateLives(){
@@ -270,6 +275,7 @@ function countNeighbors(cellI, cellJ, mat) {
     }
     return neighborsCount
 }
+
 function revealNeighbors(row, col) {
     for (var i = row - 1; i <= row + 1; i++) {
         for (var j = col - 1; j <= col + 1; j++) {
@@ -390,19 +396,28 @@ function resetTimer() {
 }
 
 
+function getLevelKey() {
+    if (gLevel.size === 6 && gLevel.mines === 5) return "highScore-beginner"
+    if (gLevel.size === 10 && gLevel.mines === 20) return "highScore-intermediate"
+    if (gLevel.size === 15 && gLevel.mines === 40) return "highScore-expert"
+}
+
 
 function checkAndSaveHighScore(){
-    var bestTime = localStorage.getItem('highScore')
+    const levelKey = getLevelKey()
+    var bestTime = localStorage.getItem(levelKey)
     var currTime = gGame.secsPassed * 1000
 
     if (!bestTime || currTime < bestTime){
-        localStorage.setItem('highScore', currTime)
+        localStorage.setItem(levelKey, currTime)
         displayHighScore()
     }
 }
 
 function displayHighScore(){
-    var bestTime = localStorage.getItem('highScore')
+    const levelKey = getLevelKey()
+
+    var bestTime = localStorage.getItem(levelKey)
 
     if (!bestTime) {
         bestTime = '0'
@@ -417,7 +432,8 @@ function displayHighScore(){
 }
 
 function clearHighScore(){
-    localStorage.removeItem('highScore')
+    const levelKey = getLevelKey()
+    localStorage.removeItem(levelKey)
     displayHighScore()
 }
 
