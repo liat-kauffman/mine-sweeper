@@ -69,7 +69,7 @@ function updateLevel(elBtn){
         updateLeveInter()
         
     }
-    else if (elBtn === 3){
+    else if (elBtn=== 3){
         updateLevelExpert()
         
     }
