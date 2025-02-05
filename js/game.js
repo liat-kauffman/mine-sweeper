@@ -253,12 +253,12 @@ function onCellMarked(event, elCell) {
 
 function updateMarksLeft(){
     const elMarksCount = document.querySelector('.marks-count')
-    elMarksCount.innerText =`marks: ${gGame.markedLeft}`
+    elMarksCount.innerText =`🚩: ${gGame.markedLeft}`
 }
 
 function updateLives(){
     const elLives =document.querySelector('.lives')
-    elLives.innerText =`${'❤️ '.repeat(gGame.lives)}`
+    elLives.innerText =`${'🧡 '.repeat(gGame.lives)}`
 }
 
 
