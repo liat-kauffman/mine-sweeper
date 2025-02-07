@@ -213,7 +213,7 @@ function onCellClicked(elCell) {
         if (gGame.lives === 0) {
             revealAllMines()
             gameOver(false)
-        } else {
+        } else if (gGame.lives !== 0){
             setTimeout(() => {
                 cell.isCovered = true
                 elCell.classList.add('covered')
@@ -312,9 +312,8 @@ function revealAllMines() {
                 const elCell = document.getElementById(`cell-${i}-${j}`)
                 elCell.classList.remove('covered')
                 elCell.classList.add('revealed')
-                elCell.style.color = 'black'
                 elCell.style.backgroundColor = 'red'
-                elCell.innerText = MINE
+                elCell.textContent = MINE
             }
         }
     }
