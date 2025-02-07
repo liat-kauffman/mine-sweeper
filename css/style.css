@@ -1,4 +1,4 @@
-body {
+/* body {
     background-color: rgb(209, 178, 215);
     text-align: center;
     justify-self: start;
@@ -7,8 +7,8 @@ body {
 
 
 table {
-    width: 400px;
-    height: 350px;
+    width: 600px;
+    height: 550px;
     border: 1px solid black;
     margin-inline: auto;
     margin-block: 10px;
@@ -35,10 +35,7 @@ h1 {
     background-color: rgb(228, 127, 87);
     border-width: 0.5px;
     margin-right: 20px;
-    padding-top: 10px;
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-bottom: 10px;
+    padding: 10px 15px 10px 15px;
     border-color: rgb(250, 203, 145);
     border-radius: 15px;
     
@@ -83,7 +80,7 @@ td.mine {
 .level{
     color: black;
     background-color: rgb(177, 138, 212);
-    font-size: 20px;
+    font-size: 24px;
     border-width: 0.5px;
     margin-right: 20px;
     padding: 8px;
@@ -112,4 +109,119 @@ td.mine {
     margin: auto;
 }
 
+ */
+ body {
+    background-color: rgb(209, 178, 215);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ensures centering even on short screens */
+    margin: 0;
+}
 
+h1 {
+    color: rgb(70, 11, 77);
+    font-weight: bolder;
+}
+
+/* Center table */
+table {
+    width: 500px;
+    height: 450px;
+    border: 1px solid black;
+    margin: 10px auto;
+    border-collapse: collapse;
+}
+
+.board td {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    padding-right: 4px;
+    text-align: center;
+    transition: background-color 0.5s;
+    cursor: pointer;
+}
+
+.board td:hover {
+    background-color: lightsalmon;
+}
+
+/* Cell styles */
+.cell {
+    background-color: rgb(171, 96, 188);
+    cursor: default;
+    font-size: smaller;
+}
+
+.revealed {
+    color: black;
+    background-color: rgb(244, 155, 155);
+}
+
+td.mine {
+    background-color: rgb(171, 96, 188);
+}
+
+.cell.marked {
+    color: black;
+}
+
+/* Buttons and Menus */
+.restart-btn,
+.level,
+.clear {
+    background-color: rgb(228, 127, 87);
+    border-width: 0.5px;
+    padding: 10px 15px;
+    border-color: rgb(250, 203, 145);
+    border-radius: 15px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.level {
+    background-color: rgb(177, 138, 212);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+
+.clear {
+    background-color: rgb(239, 190, 161);
+    font-size: 15px;
+    padding: 8px;
+}
+
+.menu {
+    margin-left: 20px;
+}
+
+/* Timer and Lives */
+.timer-container {
+    text-align: center;
+    margin: 10px;
+}
+
+.timer {
+    margin-right: 15px;
+    font-size: 20px;
+}
+
+.lives {
+    font-size: 30px;
+    margin: auto;
+}
+
+/* Flexbox for centering all elements */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}

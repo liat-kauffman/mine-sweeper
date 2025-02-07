@@ -37,6 +37,7 @@ function onInit() {
     updateLevel()
 }
 
+
 function restart() {
     clearInterval(gTimerInterval)
     gTimerInterval = null
@@ -56,6 +57,7 @@ function restart() {
     displayHighScore()
     
 }
+
 
 
 function updateLevel(elBtn){
@@ -110,7 +112,7 @@ function buildBoard() {
         }
     }
 
-    placeMines(board) 
+    placeMines(board)
 
     for (var i = 0; i < size; i++) {
         for (var j = 0; j < size; j++) {
@@ -119,9 +121,11 @@ function buildBoard() {
             }
         }
     }
-    console.table(board);
+    console.table(board)
     return board
 }
+
+
 
 function placeMines(board) {
     const size = gLevel.size
@@ -139,6 +143,7 @@ function placeMines(board) {
     }
 }
 
+
 function renderBoard(board) {
     var strHTML = ''
     for (var i = 0; i < board.length; i++) {
@@ -146,15 +151,7 @@ function renderBoard(board) {
 
         for (var j = 0; j < board[0].length; j++) {
             const cell = board[i][j]
-            var className = 'cell covered'
-
-            if (cell.isMine) {
-                className += ' mine' 
-            } else if (cell.minesAroundCount === 0) {
-                className += ' empty'
-            } else {
-                className += ' neg-count'
-            }
+            var className = createCellClass(cell)
 
             strHTML += `<td 
                 id="cell-${i}-${j}" 
@@ -163,8 +160,7 @@ function renderBoard(board) {
                 onclick="onCellClicked(this)"
                 oncontextmenu="onCellMarked(event, this)" 
                 class="${className}">
-                ${cell.isMine ? MINE :(cell.isMarked ? FLAG : (cell.minesAroundCount === 0 ? '' : cell.minesAroundCount))}
-                 
+                
                 </td>`
         }
 
@@ -175,24 +171,40 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML
 }
 
+function createCellClass(cell){
+
+    var className = 'cell covered'
+
+            if (cell.isMine) {
+                className += ' mine' 
+            } else if (cell.minesAroundCount !== 0) {
+                className += ' neg-count'
+            }
+    
+    return className
+}
+
+
 
 function onCellClicked(elCell) {
 
     if (!gGame.isOn) return
+    
+    const i = +elCell.dataset.i
+    const j = +elCell.dataset.j
+    const cell = gBoard[i][j]
 
     if (gGame.secsPassed === 0) {
         startTimer()
     }
 
-    const i = +elCell.dataset.i
-    const j = +elCell.dataset.j
-    const cell = gBoard[i][j]
 
     if (!cell || cell.isMarked || !cell.isCovered) return
     
     cell.isCovered = false
     elCell.classList.remove('covered')
     elCell.classList.add('revealed')
+
 
     if (cell.isMine) {
         elCell.textContent = MINE
@@ -215,8 +227,15 @@ function onCellClicked(elCell) {
         revealNeighbors(i, j)
     }
 
+    if (!cell.isMine && cell.minesAroundCount > 0) {
+        countNeighbors()
+        elCell.textContent = cell.minesAroundCount
+    } 
+
+
     checkWin()
 }
+
 
 function onCellMarked(event, elCell) {
     event.preventDefault()
