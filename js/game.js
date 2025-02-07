@@ -6,6 +6,7 @@ const MINE = '💣'
 const FLAG = '🚩'
 
 var gTimerInterval;
+var timeOutId;
 
 
 const gLevel = {
@@ -210,17 +211,17 @@ function onCellClicked(elCell) {
         gGame.lives--
         updateLives()
 
-        if (gGame.lives === 0) {
-            revealAllMines()
-            gameOver(false)
-        } else if (gGame.lives !== 0){
-            setTimeout(() => {
+        if (gGame.lives !== 0) {
+            timeOutId = setTimeout(() => {
                 cell.isCovered = true
                 elCell.classList.add('covered')
                 elCell.classList.remove('revealed')
                 elCell.textContent = '' 
             }, 1000)
-            
+
+        } if (gGame.lives < 1 ){
+            revealAllMines()
+            gameOver(false)
         }
 
     } else if (cell.minesAroundCount === 0) {
@@ -310,6 +311,7 @@ function revealAllMines() {
         for (var j = 0; j < gLevel.size; j++) {
             if (gBoard[i][j].isMine) {
                 const elCell = document.getElementById(`cell-${i}-${j}`)
+                clearTimeout(timeOutId)
                 elCell.classList.remove('covered')
                 elCell.classList.add('revealed')
                 elCell.style.backgroundColor = 'red'
