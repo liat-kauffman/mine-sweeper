@@ -253,7 +253,7 @@ function onCellMarked(event, elCell) {
     if (cell.isMarked) {
 
         cell.isMarked = false
-        elCell.textContent = cell.minesAroundCount === 0 ? '' : cell.minesAroundCount
+        elCell.textContent = ''
         gGame.markedLeft++
         elCell.classList.remove('marked')
 
