@@ -10,8 +10,7 @@ var gTimerInterval;
 
 const gLevel = {
     size: 6,
-    mines: 5,
-    class: ''
+    mines: 5
 }
 var gBoard = []
 
@@ -219,8 +218,9 @@ function onCellClicked(elCell) {
                 cell.isCovered = true
                 elCell.classList.add('covered')
                 elCell.classList.remove('revealed')
-                elCell.textContent = MINE
+                elCell.textContent = '' 
             }, 1000)
+            
         }
 
     } else if (cell.minesAroundCount === 0) {
